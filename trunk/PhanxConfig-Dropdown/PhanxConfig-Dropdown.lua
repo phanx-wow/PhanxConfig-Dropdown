@@ -1,23 +1,24 @@
 --[[--------------------------------------------------------------------
 	PhanxConfig-Dropdown
-	Simple color picker widget generator. Requires LibStub.
+	Simple color picker widget generator.
 	Based on tekKonfig-Dropdown by Tekkub.
+	Requires LibStub.
 ----------------------------------------------------------------------]]
 
-local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", 1)
+local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", 2)
 if not lib then return end
 
 local function Frame_OnEnter(self)
-	if self.hint then
+	if self.desc then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self.hint, nil, nil, nil, nil, true)
+		GameTooltip:SetText(self.desc, nil, nil, nil, nil, true)
 	end
 end
 
 local function Button_OnEnter(self)
-	if self:GetParent().hint then
+	if self:GetParent().desc then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self.hint, nil, nil, nil, nil, true)
+		GameTooltip:SetText(self.desc, nil, nil, nil, nil, true)
 	end
 end
 
