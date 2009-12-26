@@ -5,7 +5,7 @@
 	Requires LibStub.
 ----------------------------------------------------------------------]]
 
-local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", 2)
+local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", 3)
 if not lib then return end
 
 local function Frame_OnEnter(self)
@@ -35,8 +35,17 @@ local function OnHide()
 	CloseDropDownMenus()
 end
 
+local function GetValue(self)
+	return UIDropDownMenu_GetSelectedValue(self) or self.valueText:GetText()
+end
+
+local function SetValue(self, value, text)
+	self.valueText:SetText(text or value)
+	UIDropDownMenu_SetSelectedValue(self, value or "")
+end
+
 local i = 0
-function lib.CreateDropdown(parent, name)
+function lib.CreateDropdown(parent, name, init)
 	i = i + 1
 
 	local frame = CreateFrame("Frame", nil, parent)
@@ -95,14 +104,21 @@ function lib.CreateDropdown(parent, name)
 
 	button:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 	button:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
-	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	button:SetDisabledTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
+	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	button:GetHighlightTexture():SetBlendMode("ADD")
 
 	dropdown.container = frame
 	dropdown.button = button
 	dropdown.label = label
-	dropdown.value = value
+	dropdown.valueText = value
+
+	dropdown.GetValue = GetValue
+	dropdown.SetValue = SetValue
+
+	if init then
+		UIDropDownMenu_Initialize(dropdown, init)
+	end
 
 	return dropdown
 end
