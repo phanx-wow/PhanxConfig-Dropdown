@@ -3,6 +3,10 @@
 	Simple color picker widget generator.
 	Based on tekKonfig-Dropdown by Tekkub.
 	Requires LibStub.
+
+	This library is not intended for use by other authors. Absolutely no
+	support of any kind will be provided for other authors using it, and
+	its internals may change at any time without notice.
 ----------------------------------------------------------------------]]
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", 3)
@@ -68,27 +72,27 @@ function lib.CreateDropdown(parent, name, init)
 	ltex:SetWidth(25)
 	ltex:SetHeight(64)
 
-	local rtex = dropdown:CreateTexture(nil, "ARTWORK")
+	local rtex = dropdown:CreateTexture(nil, "BORDER")
 	rtex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	rtex:SetTexCoord(0.8046875, 1, 0, 1)
 	rtex:SetPoint("TOPRIGHT", dropdown, 0, 17)
 	rtex:SetWidth(25)
 	rtex:SetHeight(64)
 
-	local mtex = dropdown:CreateTexture(nil, "ARTWORK")
+	local mtex = dropdown:CreateTexture(nil, "BORDER")
 	mtex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	mtex:SetTexCoord(0.1953125, 0.8046875, 0, 1)
 	mtex:SetPoint("LEFT", ltex, "RIGHT")
 	mtex:SetPoint("RIGHT", rtex, "LEFT")
 	mtex:SetHeight(64)
 
-	local label = frame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+	local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	label:SetPoint("BOTTOMLEFT", dropdown, "TOPLEFT", 20, 0)
 	label:SetPoint("BOTTOMRIGHT", dropdown, "TOPRIGHT", -20, 0)
 	label:SetJustifyH("LEFT")
 	label:SetText(name)
 
-	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "ARTWORK", "GameFontHighlightSmall")
+	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall")
 	value:SetPoint("LEFT", ltex, 26, 2)
 	value:SetPoint("RIGHT", rtex, -43, 2)
 	value:SetJustifyH("LEFT")
