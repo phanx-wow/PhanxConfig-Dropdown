@@ -20,9 +20,9 @@ local function Frame_OnEnter(self)
 end
 
 local function Button_OnEnter(self)
-	if self:GetParent().desc then
+	if self:GetParent():GetParent().desc then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self.desc, nil, nil, nil, nil, true)
+		GameTooltip:SetText(self:GetParent():GetParent().desc, nil, nil, nil, nil, true)
 	end
 end
 
