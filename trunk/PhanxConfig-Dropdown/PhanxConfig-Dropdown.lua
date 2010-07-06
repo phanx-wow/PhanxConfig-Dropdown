@@ -20,10 +20,7 @@ local function Frame_OnEnter(self)
 end
 
 local function Button_OnEnter(self)
-	if self:GetParent():GetParent().desc then
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self:GetParent():GetParent().desc, nil, nil, nil, nil, true)
-	end
+	return Frame_OnEnter(self:GetParent():GetParent())
 end
 
 local function OnLeave()
@@ -40,12 +37,12 @@ local function OnHide()
 end
 
 local function GetValue(self)
-	return UIDropDownMenu_GetSelectedValue(self) or self.valueText:GetText()
+	return UIDropDownMenu_GetSelectedValue(self.dropdown) or self.valueText:GetText()
 end
 
 local function SetValue(self, value, text)
 	self.valueText:SetText(text or value)
-	UIDropDownMenu_SetSelectedValue(self, value or "")
+	UIDropDownMenu_SetSelectedValue(self.dropdown, value or "UNKNOWN")
 end
 
 local i = 0
@@ -112,17 +109,17 @@ function lib.CreateDropdown(parent, name, init)
 	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	button:GetHighlightTexture():SetBlendMode("ADD")
 
-	dropdown.container = frame
-	dropdown.button = button
-	dropdown.label = label
-	dropdown.valueText = value
+	frame.button = button
+	frame.dropdown = dropdown
+	frame.labelText = label
+	frame.valueText = value
 
-	dropdown.GetValue = GetValue
-	dropdown.SetValue = SetValue
+	frame.GetValue = GetValue
+	frame.SetValue = SetValue
 
 	if init then
 		UIDropDownMenu_Initialize(dropdown, init)
 	end
 
-	return dropdown
+	return frame
 end
