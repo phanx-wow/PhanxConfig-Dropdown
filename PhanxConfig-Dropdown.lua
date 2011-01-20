@@ -48,7 +48,7 @@ local function SetValue(self, value, text)
 end
 
 local i = 0
-function lib.CreateDropdown(parent, name, init)
+function lib.CreateDropdown(parent, name, init, desc)
 	i = i + 1
 
 	local frame = CreateFrame("Frame", nil, parent)
@@ -58,6 +58,8 @@ function lib.CreateDropdown(parent, name, init)
 	frame:SetScript("OnEnter", Frame_OnEnter)
 	frame:SetScript("OnLeave", OnLeave)
 	frame:SetScript("OnHide", OnHide)
+
+	frame.desc = desc
 
 	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame)
 	dropdown:SetPoint("TOPLEFT", frame, -16, -14)
