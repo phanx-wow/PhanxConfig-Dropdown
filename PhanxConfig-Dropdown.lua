@@ -31,7 +31,7 @@ end
 
 local function OnClick(self)
 	PlaySound("igMainMenuOptionCheckBoxOn")
-	ToggleDropDownMenu(nil, nil, self:GetParent())
+	ToggleDropDownMenu(nil, nil, self:GetParent(), nil, 12, 22)
 end
 
 local function OnHide()
@@ -56,18 +56,22 @@ function lib.CreateDropdown(parent, name, init, desc)
 	i = i + 1
 
 	local frame = CreateFrame("Frame", nil, parent)
+	frame:SetWidth(186)
 	frame:SetHeight(42)
-	frame:SetWidth(162)
 	frame:EnableMouse(true)
 	frame:SetScript("OnEnter", Frame_OnEnter)
 	frame:SetScript("OnLeave", OnLeave)
 	frame:SetScript("OnHide", OnHide)
 
+	frame.bg = frame:CreateTexture(nil, "BACKGROUND")
+	frame.bg:SetAllPoints(true)
+	frame.bg:SetTexture(0, 0, 0, 0)
+
 	frame.desc = desc
 
 	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame)
-	dropdown:SetPoint("TOPLEFT", frame, -16, -14)
-	dropdown:SetPoint("TOPRIGHT", frame, 16, -14)
+	dropdown:SetPoint("BOTTOMLEFT", -16, -4)
+	dropdown:SetPoint("BOTTOMRIGHT", 15, -4)
 	dropdown:SetHeight(32)
 
 	local ltex = dropdown:CreateTexture(dropdown:GetName() .. "Left", "ARTWORK")
@@ -91,15 +95,15 @@ function lib.CreateDropdown(parent, name, init, desc)
 	mtex:SetPoint("RIGHT", rtex, "LEFT")
 	mtex:SetHeight(64)
 
-	local label = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	label:SetPoint("BOTTOMLEFT", dropdown, "TOPLEFT", 20, 0)
-	label:SetPoint("BOTTOMRIGHT", dropdown, "TOPRIGHT", -20, 0)
+	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	label:SetPoint("TOPLEFT", frame, 5, 0)
+	label:SetPoint("TOPRIGHT", frame, -5, 0)
 	label:SetJustifyH("LEFT")
 	label:SetText(name)
 
 	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall")
-	value:SetPoint("LEFT", ltex, 26, 2)
-	value:SetPoint("RIGHT", rtex, -43, 2)
+	value:SetPoint("LEFT", ltex, 26, 0)
+	value:SetPoint("RIGHT", rtex, -43, 0)
 	value:SetJustifyH("LEFT")
 	value:SetHeight(10)
 
