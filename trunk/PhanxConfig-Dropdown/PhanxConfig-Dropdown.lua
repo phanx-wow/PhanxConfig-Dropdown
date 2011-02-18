@@ -43,8 +43,8 @@ local function GetValue(self)
 end
 
 local function SetValue(self, value, text)
-	self.valueText:SetText(text or value)
 	UIDropDownMenu_SetSelectedValue(self.dropdown, value or "UNKNOWN")
+	self.valueText:SetText(text or value)
 end
 
 local i = 0
