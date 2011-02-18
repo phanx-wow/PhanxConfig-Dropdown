@@ -49,6 +49,10 @@ end
 
 local i = 0
 function lib.CreateDropdown(parent, name, init, desc)
+	assert( type(parent) == "table" and parent.GetFrameType, "PhanxConfig-Button: Parent is not a valid frame!" )
+	if type(name) ~= "string" then name = nil end
+	if type(desc) ~= "string" then desc = nil end
+
 	i = i + 1
 
 	local frame = CreateFrame("Frame", nil, parent)
@@ -121,7 +125,7 @@ function lib.CreateDropdown(parent, name, init, desc)
 	frame.GetValue = GetValue
 	frame.SetValue = SetValue
 
-	if init then
+	if type(init) == "function" then
 		UIDropDownMenu_Initialize(dropdown, init)
 	end
 
