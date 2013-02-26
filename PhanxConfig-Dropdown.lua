@@ -9,7 +9,7 @@
 	its internals may change at any time without notice.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = tonumber(("$Revision$"):match("%d+"))
+local MINOR_VERSION = tonumber(strmatch("$Revision$", "%d+"))
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -48,7 +48,7 @@ local function SetValue(self, value, text)
 end
 
 local i = 0
-function lib.CreateDropdown(parent, name, init, desc)
+function lib.CreateDropdown(parent, name, desc, init)
 	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Button: Parent is not a valid frame!" )
 	if type(name) ~= "string" then name = nil end
 	if type(desc) ~= "string" then desc = nil end
@@ -69,13 +69,13 @@ function lib.CreateDropdown(parent, name, init, desc)
 
 	frame.desc = desc
 
-	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame)
+	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame) -- UIDropDownMenu system requires a global name
 	dropdown:SetPoint("BOTTOMLEFT", -16, -4)
 	dropdown:SetPoint("BOTTOMRIGHT", 15, -4)
 	dropdown:SetHeight(32)
 	frame.dropdown = dropdown
 
-	local ltex = dropdown:CreateTexture(dropdown:GetName() .. "Left", "ARTWORK")
+	local ltex = dropdown:CreateTexture(dropdown:GetName() .. "Left", "ARTWORK") -- UIDropDownMenu system requires a global name
 	ltex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	ltex:SetTexCoord(0, 0.1953125, 0, 1)
 	ltex:SetPoint("TOPLEFT", dropdown, 0, 17)
@@ -96,7 +96,7 @@ function lib.CreateDropdown(parent, name, init, desc)
 	mtex:SetPoint("RIGHT", rtex, "LEFT")
 	mtex:SetHeight(64)
 
-	local icon = dropdown:CreateTexture(dropdown:GetName() .. "Icon", "OVERLAY")
+	local icon = dropdown:CreateTexture(dropdown:GetName() .. "Icon", "OVERLAY") -- UIDropDownMenu system requires a global name
 	frame.icon = icon
 
 	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -106,7 +106,7 @@ function lib.CreateDropdown(parent, name, init, desc)
 	label:SetText(name)
 	frame.labelText = label
 
-	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall")
+	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall") -- UIDropDownMenu system requires a global name
 	value:SetPoint("LEFT", ltex, 26, 0)
 	value:SetPoint("RIGHT", rtex, -43, 0)
 	value:SetJustifyH("LEFT")
