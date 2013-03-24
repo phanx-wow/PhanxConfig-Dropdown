@@ -15,9 +15,19 @@ local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
 
 local function Frame_OnEnter(self)
-	if self.desc then
+	if self.OnEnter then
+		self:OnEnter()
+	elseif self.desc then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:SetText(self.desc, nil, nil, nil, nil, true)
+	end
+end
+
+local function Frame_OnLeave(self)
+	if self.OnLeave then
+		self:OnLeave()
+	else
+		GameTooltip:Hide()
 	end
 end
 
@@ -25,8 +35,8 @@ local function Button_OnEnter(self)
 	return Frame_OnEnter(self:GetParent():GetParent())
 end
 
-local function OnLeave()
-	GameTooltip:Hide()
+local function Button_OnLeave(self)
+	return Frame_OnLeave(self:GetParent():GetParent())
 end
 
 local function OnClick(self)
@@ -60,7 +70,7 @@ function lib.CreateDropdown(parent, name, desc, init)
 	frame:SetHeight(42)
 	frame:EnableMouse(true)
 	frame:SetScript("OnEnter", Frame_OnEnter)
-	frame:SetScript("OnLeave", OnLeave)
+	frame:SetScript("OnLeave", Frame_OnLeave)
 	frame:SetScript("OnHide", OnHide)
 
 	frame.bg = frame:CreateTexture(nil, "BACKGROUND")
@@ -118,7 +128,7 @@ function lib.CreateDropdown(parent, name, desc, init)
 	button:SetWidth(24)
 	button:SetHeight(24)
 	button:SetScript("OnEnter", Button_OnEnter)
-	button:SetScript("OnLeave", OnLeave)
+	button:SetScript("OnLeave", Button_OnLeave)
 	button:SetScript("OnClick", OnClick)
 	frame.button = button
 
