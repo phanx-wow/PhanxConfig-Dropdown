@@ -48,6 +48,18 @@ local function OnHide()
 	CloseDropDownMenus()
 end
 
+local function Disable(self)
+	self.labelText:SetFontObject(GameFontDisable)
+	self.valueText:SetFontObject(GameFontDisableSmall)
+	self.button:Disable()
+end
+
+local function Enable(self)
+	self.labelText:SetFontObject(GameFontNormal)
+	self.valueText:SetFontObject(GameFontHighlightSmall)
+	self.button:Enable()
+end
+
 local function GetValue(self)
 	return UIDropDownMenu_GetSelectedValue(self.dropdown) or self.valueText:GetText()
 end
@@ -138,6 +150,8 @@ function lib.CreateDropdown(parent, name, desc, init)
 	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	button:GetHighlightTexture():SetBlendMode("ADD")
 
+	frame.Enable = Enable
+	frame.Disable = Disable
 	frame.GetValue = GetValue
 	frame.SetValue = SetValue
 
