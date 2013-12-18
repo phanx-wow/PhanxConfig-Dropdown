@@ -71,7 +71,7 @@ end
 
 local i = 0
 function lib.CreateDropdown(parent, name, desc, init)
-	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Button: Parent is not a valid frame!" )
+	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!" )
 	if type(name) ~= "string" then name = nil end
 	if type(desc) ~= "string" then desc = nil end
 
