@@ -14,12 +14,14 @@ local MINOR_VERSION = tonumber(strmatch("$Revision$", "%d+"))
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
 
+------------------------------------------------------------------------
+
 local function Frame_OnEnter(self)
 	if self.OnEnter then
 		self:OnEnter()
-	elseif self.desc then
+	elseif self.tooltipText then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self.desc, nil, nil, nil, nil, true)
+		GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
 	end
 end
 
@@ -48,32 +50,43 @@ local function OnHide()
 	CloseDropDownMenus()
 end
 
-local function Disable(self)
+------------------------------------------------------------------------
+
+local methods = {}
+
+function methods:GetValue()
+	return UIDropDownMenu_GetSelectedValue(self.dropdown) or self.valueText:GetText()
+end
+function methods:SetValue(value, text)
+	UIDropDownMenu_SetSelectedValue(self.dropdown, value or "UNKNOWN")
+	self.valueText:SetText(text or value)
+end
+
+function methods:GetTooltipText()
+	return self.tooltipText
+end
+function methods:SetTooltipText(text)
+	self.tooltipText = text
+end
+
+function methods:Enable()
+	self.labelText:SetFontObject(GameFontNormal)
+	self.valueText:SetFontObject(GameFontHighlightSmall)
+	self.button:Enable()
+end
+function methods:Disable()
 	self.labelText:SetFontObject(GameFontDisable)
 	self.valueText:SetFontObject(GameFontDisableSmall)
 	self.button:Disable()
 end
 
-local function Enable(self)
-	self.labelText:SetFontObject(GameFontNormal)
-	self.valueText:SetFontObject(GameFontHighlightSmall)
-	self.button:Enable()
-end
-
-local function GetValue(self)
-	return UIDropDownMenu_GetSelectedValue(self.dropdown) or self.valueText:GetText()
-end
-
-local function SetValue(self, value, text)
-	UIDropDownMenu_SetSelectedValue(self.dropdown, value or "UNKNOWN")
-	self.valueText:SetText(text or value)
-end
+------------------------------------------------------------------------
 
 local i = 0
-function lib:New(parent, name, desc, init)
+function lib:New(parent, name, tooltipText, init)
 	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!" )
 	if type(name) ~= "string" then name = nil end
-	if type(desc) ~= "string" then desc = nil end
+	if type(tooltipText) ~= "string" then tooltipText = nil end
 
 	i = i + 1
 
@@ -88,8 +101,6 @@ function lib:New(parent, name, desc, init)
 	frame.bg = frame:CreateTexture(nil, "BACKGROUND")
 	frame.bg:SetAllPoints(true)
 	frame.bg:SetTexture(0, 0, 0, 0)
-
-	frame.desc = desc
 
 	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame) -- UIDropDownMenu system requires a global name
 	dropdown:SetPoint("BOTTOMLEFT", -16, -4)
@@ -125,7 +136,6 @@ function lib:New(parent, name, desc, init)
 	label:SetPoint("TOPLEFT", frame, 5, 0)
 	label:SetPoint("TOPRIGHT", frame, -5, 0)
 	label:SetJustifyH("LEFT")
-	label:SetText(name)
 	frame.labelText = label
 
 	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall") -- UIDropDownMenu system requires a global name
@@ -150,11 +160,12 @@ function lib:New(parent, name, desc, init)
 	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	button:GetHighlightTexture():SetBlendMode("ADD")
 
-	frame.Enable = Enable
-	frame.Disable = Disable
-	frame.GetValue = GetValue
-	frame.SetValue = SetValue
+	for name, func in pairs(methods) do
+		button[name] = func
+	end
 
+	label:SetText(name)
+	frame.tooltipText = tooltipText
 	if type(init) == "function" then
 		UIDropDownMenu_Initialize(dropdown, init)
 	end
