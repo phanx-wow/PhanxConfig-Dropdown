@@ -161,7 +161,7 @@ function lib:New(parent, name, tooltipText, init)
 	button:GetHighlightTexture():SetBlendMode("ADD")
 
 	for name, func in pairs(methods) do
-		button[name] = func
+		frame[name] = func
 	end
 
 	label:SetText(name)
