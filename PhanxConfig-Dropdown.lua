@@ -89,6 +89,15 @@ end
 
 ------------------------------------------------------------------------
 
+local function GetInitFunc(self, data)
+	local data = data
+	return function()
+		for i = 1, #data do
+			UIDropDownMenu_AddButton(data[i])
+		end
+	end
+end
+
 local i = 0
 function lib:New(parent, name, tooltipText, init)
 	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!" )
@@ -173,7 +182,10 @@ function lib:New(parent, name, tooltipText, init)
 
 	label:SetText(name)
 	frame.tooltipText = tooltipText
-	if type(init) == "function" then
+
+	if type(init) == "table" then
+		UIDropDownMenu_Initialize(dropdown, GetInitFunc(init))
+	elseif type(init) == "function" then
 		UIDropDownMenu_Initialize(dropdown, init)
 	end
 
