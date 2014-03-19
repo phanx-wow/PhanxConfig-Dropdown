@@ -62,10 +62,17 @@ function methods:SetValue(value, text)
 	self.valueText:SetText(text or value)
 end
 
-function methods:GetTooltipText()
+function methods:GetLabel()
+	return self.labelText:GetText()
+end
+function methods:SetLabel(text)
+	self.labelText:SetText(text)
+end
+
+function methods:GetTooltip()
 	return self.tooltipText
 end
-function methods:SetTooltipText(text)
+function methods:SetTooltip(text)
 	self.tooltipText = text
 end
 
