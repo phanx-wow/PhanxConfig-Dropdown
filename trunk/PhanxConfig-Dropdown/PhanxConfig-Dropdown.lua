@@ -16,38 +16,51 @@ if not lib then return end
 
 ------------------------------------------------------------------------
 
-local function Frame_OnEnter(self)
-	if self.OnEnter then
-		self:OnEnter()
-	elseif self.tooltipText then
+local function Dropdown_OnEnter(self)
+	local container = self:GetParent()
+	if container.OnEnter then
+		container:OnEnter()
+	elseif container.tooltipText then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+		GameTooltip:SetText(container.tooltipText, nil, nil, nil, nil, true)
 	end
 end
 
-local function Frame_OnLeave(self)
-	if self.OnLeave then
-		self:OnLeave()
+local function Dropdown_OnLeave(self)
+	local container = self:GetParent()
+	if container.OnLeave then
+		container:OnLeave()
 	else
 		GameTooltip:Hide()
 	end
 end
 
-local function Button_OnEnter(self)
-	return Frame_OnEnter(self:GetParent():GetParent())
+local function Dropdown_OnShow(self)
+	local container = self:GetParent()
+	local width = container:GetWidth() - 19
+	UIDropDownMenu_SetWidth(self, width)
+	UIDropDownMenu_SetButtonWidth(self, width)
 end
 
-local function Button_OnLeave(self)
-	return Frame_OnLeave(self:GetParent():GetParent())
-end
+local function Button_OnClick(self)
+	local dropdown = self:GetParent()
+	local container = dropdown:GetParent()
 
-local function OnClick(self)
 	PlaySound("igMainMenuOptionCheckBoxOn")
-	ToggleDropDownMenu(nil, nil, self:GetParent(), nil, 12, 22)
-end
+	ToggleDropDownMenu(nil, nil, dropdown, nil, 12, 22)
 
-local function OnHide()
-	CloseDropDownMenus()
+	local listFrame = DropDownList1
+	if listFrame:IsShown() and listFrame.dropdown:GetParent() == container then
+		local listWidth = dropdown:GetWidth() - 21
+		if listFrame:GetWidth() < listWidth then
+			local buttonWidth = listWidth - 30
+			listFrame:SetWidth(listWidth)
+			for i = 1, listFrame.numButtons do
+				local buttonFrame = _G["DropDownList1Button"..i]
+				buttonFrame:SetWidth(buttonWidth)
+			end
+		end
+	end
 end
 
 ------------------------------------------------------------------------
@@ -66,6 +79,7 @@ function methods:GetLabel()
 	return self.labelText:GetText()
 end
 function methods:SetLabel(text)
+	if type(text) ~= "string" then text = "" end
 	self.labelText:SetText(text)
 end
 
@@ -73,6 +87,7 @@ function methods:GetTooltip()
 	return self.tooltipText
 end
 function methods:SetTooltip(text)
+	if type(text) ~= "string" then text = nil end
 	self.tooltipText = text
 end
 
@@ -87,66 +102,44 @@ function methods:Disable()
 	self.button:Disable()
 end
 
-------------------------------------------------------------------------
+-------------------------------------------------------------------------
 
-local function GetInitFunc(self, data)
-	local data = data
+local function GetInitFunc(t)
+	local infoList = t
 	return function()
-		for i = 1, #data do
-			UIDropDownMenu_AddButton(data[i])
+		for i = 1, #infoList do
+			UIDropDownMenu_AddButton(infoList[i])
 		end
 	end
 end
 
 local i = 0
 function lib:New(parent, name, tooltipText, init)
-	assert( type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!" )
-	if type(name) ~= "string" then name = nil end
-	if type(tooltipText) ~= "string" then tooltipText = nil end
+	assert(type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!")
 
 	i = i + 1
+	local NAME = "PhanxConfigDropdown" .. i
 
-	local frame = CreateFrame("Frame", nil, parent)
-	frame:SetWidth(186)
-	frame:SetHeight(42)
-	frame:EnableMouse(true)
-	frame:SetScript("OnEnter", Frame_OnEnter)
-	frame:SetScript("OnLeave", Frame_OnLeave)
-	frame:SetScript("OnHide", OnHide)
-
+	local frame = CreateFrame("Frame", NAME.."Container", parent)
+	frame:SetSize(186, 42)
+--[[
 	frame.bg = frame:CreateTexture(nil, "BACKGROUND")
 	frame.bg:SetAllPoints(true)
-	frame.bg:SetTexture(0, 0, 0, 0)
-
-	local dropdown = CreateFrame("Frame", "PhanxConfigDropdown" .. i, frame) -- UIDropDownMenu system requires a global name
+	frame.bg:SetTexture(0, 128, 0, 0.5)
+]]
+	local dropdown = CreateFrame("Frame", NAME, frame, "UIDropDownMenuTemplate") -- UIDropDownMenu system requires a global name
 	dropdown:SetPoint("BOTTOMLEFT", -16, -4)
 	dropdown:SetPoint("BOTTOMRIGHT", 15, -4)
-	dropdown:SetHeight(32)
+	dropdown:SetHitRectInsets(0, 0, -10, 0)
+	dropdown:SetScript("OnShow", Dropdown_OnShow)
+	dropdown:SetScript("OnEnter", Dropdown_OnEnter)
+	dropdown:SetScript("OnLeave", Dropdown_OnLeave)
 	frame.dropdown = dropdown
 
-	local ltex = dropdown:CreateTexture(dropdown:GetName() .. "Left", "ARTWORK") -- UIDropDownMenu system requires a global name
-	ltex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
-	ltex:SetTexCoord(0, 0.1953125, 0, 1)
-	ltex:SetPoint("TOPLEFT", dropdown, 0, 17)
-	ltex:SetWidth(25)
-	ltex:SetHeight(64)
-
-	local rtex = dropdown:CreateTexture(nil, "BORDER")
-	rtex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
-	rtex:SetTexCoord(0.8046875, 1, 0, 1)
-	rtex:SetPoint("TOPRIGHT", dropdown, 0, 17)
-	rtex:SetWidth(25)
-	rtex:SetHeight(64)
-
-	local mtex = dropdown:CreateTexture(nil, "BORDER")
-	mtex:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
-	mtex:SetTexCoord(0.1953125, 0.8046875, 0, 1)
-	mtex:SetPoint("LEFT", ltex, "RIGHT")
-	mtex:SetPoint("RIGHT", rtex, "LEFT")
-	mtex:SetHeight(64)
-
-	local icon = dropdown:CreateTexture(dropdown:GetName() .. "Icon", "OVERLAY") -- UIDropDownMenu system requires a global name
-	frame.icon = icon
+	frame.left = _G[NAME.."Left"]
+	frame.right = _G[NAME.."Right"]
+	frame.middle = _G[NAME.."Middle"]
+	frame.icon = _G[NAME.."Icon"]
 
 	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	label:SetPoint("TOPLEFT", frame, 5, 0)
@@ -154,42 +147,32 @@ function lib:New(parent, name, tooltipText, init)
 	label:SetJustifyH("LEFT")
 	frame.labelText = label
 
-	local value = dropdown:CreateFontString(dropdown:GetName() .. "Text", "OVERLAY", "GameFontHighlightSmall") -- UIDropDownMenu system requires a global name
-	value:SetPoint("LEFT", ltex, 26, 0)
-	value:SetPoint("RIGHT", rtex, -43, 0)
-	value:SetJustifyH("LEFT")
-	value:SetHeight(10)
-	frame.valueText = value
+	frame.valueText = _G[NAME.."Text"]
+	UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
-	local button = CreateFrame("Button", nil, dropdown)
-	button:SetPoint("TOPRIGHT", rtex, -16, -18)
-	button:SetWidth(24)
-	button:SetHeight(24)
-	button:SetScript("OnEnter", Button_OnEnter)
-	button:SetScript("OnLeave", Button_OnLeave)
-	button:SetScript("OnClick", OnClick)
-	frame.button = button
-
-	button:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
-	button:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
-	button:SetDisabledTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
-	button:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight")
-	button:GetHighlightTexture():SetBlendMode("ADD")
+	frame.button = _G[NAME.."Button"]
+	frame.button:SetScript("OnClick", Button_OnClick)
 
 	for name, func in pairs(methods) do
 		frame[name] = func
 	end
 
-	label:SetText(name)
-	frame.tooltipText = tooltipText
+	frame:SetLabel(name)
+	frame:SetTooltip(tooltipText)
 
-	if type(init) == "table" then
-		UIDropDownMenu_Initialize(dropdown, GetInitFunc(init))
-	elseif type(init) == "function" then
-		UIDropDownMenu_Initialize(dropdown, init)
+	if type(init) == "function" then
+		frame.Initialize = init
+	elseif type(init) == "table" then
+		frame.Initialize = GetInitFunction(init)
 	end
+	UIDropDownMenu_Initialize(dropdown, function(self, level)
+		--print("Initialize!")
+		if frame.Initialize then
+			frame:Initialize(self, level)
+		end
+	end)
 
 	return frame
 end
 
-function lib.CreateDropdown( ... ) return lib:New( ...) end
+function lib.CreateDropdown(...) return lib:New(...) end
