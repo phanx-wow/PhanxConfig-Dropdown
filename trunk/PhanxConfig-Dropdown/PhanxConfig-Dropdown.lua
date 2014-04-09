@@ -35,13 +35,6 @@ local function Dropdown_OnLeave(self)
 	end
 end
 
-local function Dropdown_OnShow(self)
-	local container = self:GetParent()
-	local width = container:GetWidth() - 19
-	UIDropDownMenu_SetWidth(self, width)
-	UIDropDownMenu_SetButtonWidth(self, width)
-end
-
 local function Button_OnClick(self)
 	local dropdown = self:GetParent()
 	local container = dropdown:GetParent()
@@ -53,8 +46,9 @@ local function Button_OnClick(self)
 	if listFrame:IsShown() and listFrame.dropdown:GetParent() == container then
 		local listWidth = dropdown:GetWidth() - 21
 		if listFrame:GetWidth() < listWidth then
-			local buttonWidth = listWidth - 30
 			listFrame:SetWidth(listWidth)
+
+			local buttonWidth = listWidth - 30
 			for i = 1, listFrame.numButtons do
 				local buttonFrame = _G["DropDownList1Button"..i]
 				buttonFrame:SetWidth(buttonWidth)
@@ -131,27 +125,34 @@ function lib:New(parent, name, tooltipText, init)
 	dropdown:SetPoint("BOTTOMLEFT", -16, -4)
 	dropdown:SetPoint("BOTTOMRIGHT", 15, -4)
 	dropdown:SetHitRectInsets(0, 0, -10, 0)
-	dropdown:SetScript("OnShow", Dropdown_OnShow)
 	dropdown:SetScript("OnEnter", Dropdown_OnEnter)
 	dropdown:SetScript("OnLeave", Dropdown_OnLeave)
 	frame.dropdown = dropdown
 
 	frame.left = _G[NAME.."Left"]
+
 	frame.right = _G[NAME.."Right"]
+	frame.right:ClearAllPoints()
+	frame.right:SetPoint("TOPRIGHT", 0, 17)
+
 	frame.middle = _G[NAME.."Middle"]
+	frame.middle:SetPoint("RIGHT", frame.right, "LEFT")
+
 	frame.icon = _G[NAME.."Icon"]
+
+	frame.valueText = _G[NAME.."Text"]
+	frame.valueText:SetPoint("LEFT", frame.left, 27, 2)
+	frame.valueText:SetJustifyH("LEFT")
+
+	frame.button = _G[NAME.."Button"]
+	frame.button:SetPoint("TOPLEFT", frame.left, 16, -18) -- TODO: check
+	frame.button:SetScript("OnClick", Button_OnClick)
 
 	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	label:SetPoint("TOPLEFT", frame, 5, 0)
 	label:SetPoint("TOPRIGHT", frame, -5, 0)
 	label:SetJustifyH("LEFT")
 	frame.labelText = label
-
-	frame.valueText = _G[NAME.."Text"]
-	UIDropDownMenu_JustifyText(dropdown, "LEFT")
-
-	frame.button = _G[NAME.."Button"]
-	frame.button:SetScript("OnClick", Button_OnClick)
 
 	for name, func in pairs(methods) do
 		frame[name] = func
