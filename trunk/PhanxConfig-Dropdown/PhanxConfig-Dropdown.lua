@@ -40,7 +40,11 @@ local function Button_OnClick(self)
 	local container = dropdown:GetParent()
 
 	PlaySound("igMainMenuOptionCheckBoxOn")
-	ToggleDropDownMenu(nil, nil, dropdown, nil, 12, 22)
+	if container.easyMenu then
+		EasyMenu(container.easyMenu, dropdown, nil, 12, 22)
+	else
+		ToggleDropDownMenu(nil, nil, dropdown, nil, 12, 22)
+	end
 
 	local listFrame = DropDownList1
 	if listFrame:IsShown() and listFrame.dropdown:GetParent() == container then
@@ -96,19 +100,18 @@ function methods:Disable()
 	self.button:Disable()
 end
 
--------------------------------------------------------------------------
-
-local function GetInitFunc(t)
-	local infoList = t
-	return function()
-		for i = 1, #infoList do
-			UIDropDownMenu_AddButton(infoList[i])
-		end
+function methods:SetMenu(menu)
+	if type(menu) == "function" then
+		self.dropdown.initialize = menu
+	elseif type(menu) == "table" then
+		self.easyMenu = menu
 	end
 end
 
+------------------------------------------------------------------------
+
 local i = 0
-function lib:New(parent, name, tooltipText, init)
+function lib:New(parent, name, tooltip, menu)
 	assert(type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!")
 
 	i = i + 1
@@ -145,7 +148,7 @@ function lib:New(parent, name, tooltipText, init)
 	frame.valueText:SetJustifyH("LEFT")
 
 	frame.button = _G[NAME.."Button"]
-	frame.button:SetPoint("TOPLEFT", frame.left, 16, -18) -- TODO: check
+	frame.button:SetPoint("TOPLEFT", frame.left, 18, -18) -- TODO: check
 	frame.button:SetScript("OnClick", Button_OnClick)
 
 	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -159,19 +162,8 @@ function lib:New(parent, name, tooltipText, init)
 	end
 
 	frame:SetLabel(name)
-	frame:SetTooltip(tooltipText)
-
-	if type(init) == "function" then
-		frame.Initialize = init
-	elseif type(init) == "table" then
-		frame.Initialize = GetInitFunction(init)
-	end
-	UIDropDownMenu_Initialize(dropdown, function(self, level)
-		--print("Initialize!")
-		if frame.Initialize then
-			frame:Initialize(self, level)
-		end
-	end)
+	frame:SetTooltip(tooltip)
+	frame:SetMenu(menu)
 
 	return frame
 end
