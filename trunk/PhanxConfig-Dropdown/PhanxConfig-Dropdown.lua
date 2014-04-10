@@ -101,10 +101,19 @@ function methods:Disable()
 end
 
 function methods:SetMenu(menu)
+	self.easyMenu = nil
+	self.dropdown.initialize = nil
+
 	if type(menu) == "function" then
 		self.dropdown.initialize = menu
 	elseif type(menu) == "table" then
 		self.easyMenu = menu
+	else
+		self.dropdown.initialize = function(...)
+			if self.Initialize then
+				self:Initialize(...)
+			end
+		end
 	end
 end
 
@@ -163,7 +172,16 @@ function lib:New(parent, name, tooltip, menu)
 
 	frame:SetLabel(name)
 	frame:SetTooltip(tooltip)
-	frame:SetMenu(menu)
+
+	if menu then
+		frame:SetMenu(menu)
+	else
+		dropdown.initialize = function(...)
+			if frame.Initialize then
+				frame:Initialize(...)
+			end
+		end
+	end
 
 	return frame
 end
