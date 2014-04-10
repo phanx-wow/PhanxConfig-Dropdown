@@ -47,11 +47,11 @@ local function Button_OnClick(self)
 	end
 
 	local listFrame = DropDownList1
-	if listFrame:IsShown() and listFrame.dropdown:GetParent() == container then
+	if listFrame:IsShown() and dropdown:GetParent() == container then
 		local listWidth = dropdown:GetWidth() - 21
 		if listFrame:GetWidth() < listWidth then
 			listFrame:SetWidth(listWidth)
-
+			listFrame:SetPoint("TOPRIGHT", dropdown, "BOTTOMRIGHT", -12, 22)
 			local buttonWidth = listWidth - 30
 			for i = 1, listFrame.numButtons do
 				local buttonFrame = _G["DropDownList1Button"..i]
