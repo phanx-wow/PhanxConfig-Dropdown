@@ -21,8 +21,11 @@ local function Dropdown_OnEnter(self)
 	if container.OnEnter then
 		container:OnEnter()
 	elseif container.tooltipText then
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(container.tooltipText, nil, nil, nil, nil, true)
+		GameTooltip:SetOwner(container, "ANCHOR_RIGHT")
+		GameTooltip:AddLine(container.labelText:GetText(), nil, nil, nil, true)
+		GameTooltip:AddLine(container.tooltipText, 1, 1, 1, true)
+		GameTooltip:SetMinimumWidth(GameTooltipTextLeft1:GetStringWidth() + 21)
+		GameTooltip:Show()
 	end
 end
 
