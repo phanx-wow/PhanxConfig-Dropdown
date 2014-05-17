@@ -22,9 +22,7 @@ local function Dropdown_OnEnter(self)
 		container:OnEnter()
 	elseif container.tooltipText then
 		GameTooltip:SetOwner(container, "ANCHOR_RIGHT")
-		GameTooltip:AddLine(container.labelText:GetText(), nil, nil, nil, true)
 		GameTooltip:AddLine(container.tooltipText, 1, 1, 1, true)
-		GameTooltip:SetMinimumWidth(GameTooltipTextLeft1:GetStringWidth() + 21)
 		GameTooltip:Show()
 	end
 end
@@ -123,8 +121,8 @@ end
 ------------------------------------------------------------------------
 
 local i = 0
-function lib:New(parent, name, tooltip, menu)
-	assert(type(parent) == "table" and parent.CreateFontString, "PhanxConfig-Dropdown: Parent is not a valid frame!")
+function lib:New(parent, label, tooltip, menu)
+	assert(type(parent) == "table" and type(rawget(parent, 0)) == "userdata", "PhanxConfig-Dropdown: parent must be a frame")
 
 	i = i + 1
 	local NAME = "PhanxConfigDropdown" .. i
@@ -173,7 +171,7 @@ function lib:New(parent, name, tooltip, menu)
 		frame[name] = func
 	end
 
-	frame:SetLabel(name)
+	frame:SetLabel(label)
 	frame:SetTooltip(tooltip)
 
 	if menu then
