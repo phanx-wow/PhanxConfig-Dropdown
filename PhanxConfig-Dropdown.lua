@@ -161,11 +161,11 @@ function lib:New(parent, label, tooltip, menu)
 	frame.button:SetPoint("TOPLEFT", frame.left, 18, -18) -- TODO: check
 	frame.button:SetScript("OnClick", Button_OnClick)
 
-	local label = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	label:SetPoint("TOPLEFT", frame, 5, 0)
-	label:SetPoint("TOPRIGHT", frame, -5, 0)
-	label:SetJustifyH("LEFT")
-	frame.labelText = label
+	local labelText = dropdown:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	labelText:SetPoint("TOPLEFT", frame, 5, 0)
+	labelText:SetPoint("TOPRIGHT", frame, -5, 0)
+	labelText:SetJustifyH("LEFT")
+	frame.labelText = labelText
 
 	for name, func in pairs(methods) do
 		frame[name] = func
