@@ -4,9 +4,8 @@
 	Based on tekKonfig-Dropdown by Tekkub.
 	Requires LibStub.
 	https://github.com/phanx/PhanxConfigWidgets
-	Copyright 2009-2014 Phanx <addons@phanx.net>
-	Do not redistribute standalone without permisssion.
-	See the accompanying LICENSE file for details.
+	Copyright (c) 2009-2014 Phanx. All rights reserved.
+	See the accompanying README and LICENSE files for more information.
 ----------------------------------------------------------------------]]
 
 local MINOR_VERSION = tonumber(strmatch("$Revision$", "%d+"))
