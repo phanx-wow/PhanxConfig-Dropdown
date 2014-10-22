@@ -80,8 +80,8 @@ local function Frame_OnLeave(self)
 end
 
 local function Frame_OnHide(self)
-	if self.dropdown.list then
-		self.dropdown.list:Hide()
+	if self.list then
+		self.list:Hide()
 	end
 end
 
@@ -96,7 +96,7 @@ local function ListButton_OnClick(self)
 
 	local callback = dropdown.OnValueChanged or dropdown.Callback
 	if callback then
-		callback(dropdown, self.value)
+		callback(dropdown, self.value, self:GetText())
 	end
 
 	PlaySound("UChatScrollButton")
@@ -238,8 +238,7 @@ local function UpdateList(self)
 end
 
 local id = 0
-function CreateList(parent) -- local
-	local dropdown = parent
+function CreateList(dropdown) -- local
 	if dropdown.list then
 		return dropdown.list
 	end
