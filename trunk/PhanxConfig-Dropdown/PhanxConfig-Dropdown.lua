@@ -153,12 +153,12 @@ local emptyList = {
 local function UpdateList(self)
 	local buttons = self.buttons
 	local dropdown = self:GetParent()
-	local items = dropdown.items
 
 	if dropdown.PreUpdate then
-		dropdown:PreUpdate(items)
+		dropdown:PreUpdate()
 	end
 
+	local items = dropdown.items
 	if #items == 0 then
 		--print("List is empty!")
 		items = emptyList
@@ -450,9 +450,6 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	dropdown:SetTooltip(tooltipText)
 	dropdown:SetList(items)
 	dropdown.keepShownOnClick = keepShownOnClick
-
-	-- backwards compat?
-	dropdown.dropdown = dropdown
 
 	return dropdown
 end
