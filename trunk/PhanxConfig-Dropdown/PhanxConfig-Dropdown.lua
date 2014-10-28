@@ -356,7 +356,11 @@ function methods:Disable()
 	self.button:Disable()
 end
 function methods:SetEnabled(enable)
-	return enable and self:Enable() or self:Disable()
+	if enable then
+		self:Enable()
+	else
+		self:Disable()
+	end
 end
 
 ------------------------------------------------------------------------
