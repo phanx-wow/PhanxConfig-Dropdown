@@ -355,6 +355,9 @@ function methods:Disable()
 	self.valueText:SetFontObject(GameFontDisableSmall)
 	self.button:Disable()
 end
+function methods:SetEnabled(enable)
+	return enable and self:Enable() or self:Disable()
+end
 
 ------------------------------------------------------------------------
 
