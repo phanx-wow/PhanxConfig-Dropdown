@@ -314,13 +314,18 @@ function methods:GetValue()
 end
 function methods:SetValue(value, text)
 	self.selected = value
-	if not text and self.items then
+	if not text and self.items and type(self.items[1]) == "table" then
+		local found
 		for i = 1, #self.items do
 			local item = self.items[i]
 			if type(item) == "table" and item.value == value then
 				text = item.text
+				found = true
 				break
 			end
+		end
+		if not found then
+			text = CUSTOM
 		end
 	end
 	self.valueText:SetText(text or value)
