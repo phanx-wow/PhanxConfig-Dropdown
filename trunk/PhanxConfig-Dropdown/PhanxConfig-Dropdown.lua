@@ -314,6 +314,15 @@ function methods:GetValue()
 end
 function methods:SetValue(value, text)
 	self.selected = value
+	if not text and self.items then
+		for i = 1, #self.items do
+			local item = self.items[i]
+			if type(item) == "table" and item.value == value then
+				text = item.text
+				break
+			end
+		end
+	end
 	self.valueText:SetText(text or value)
 end
 
