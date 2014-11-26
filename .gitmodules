@@ -1,0 +1,3 @@
+[submodule "LibStub"]
+	path = LibStub
+	url = https://github.com/Phanx/LibStub.git
