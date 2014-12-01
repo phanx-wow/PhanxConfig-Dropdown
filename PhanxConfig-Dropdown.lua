@@ -39,7 +39,7 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 182
+local MINOR_VERSION = 20141201
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -125,7 +125,7 @@ local function ListButton_OnClick(self)
 
 	dropdown.valueText:SetText(self:GetText() or self.value)
 
-	local callback = dropdown.OnValueChanged or dropdown.Callback
+	local callback = dropdown.OnValueChanged
 	if callback then
 		callback(dropdown, self.value, self:GetText())
 	end
@@ -256,7 +256,7 @@ local function UpdateList(self)
 			button:Hide()
 		end
 
-		local callback = dropdown.OnListButtonChanged or dropdown.ListButtonCallback
+		local callback = dropdown.OnListButtonChanged
 		if callback then
 			callback(dropdown, button, item, selected)
 		end
