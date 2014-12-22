@@ -39,7 +39,7 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20141201
+local MINOR_VERSION = 20141222
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -345,6 +345,14 @@ function methods:GetValue()
 end
 function methods:SetValue(value, text)
 	self.selected = value
+	if not text and self.items and type(self.items[1]) == "table" then
+		for i = 1, #self.items do
+			if self.items[i].value == value then
+				text = self.items[i].text
+				break
+			end
+		end
+	end
 	self.valueText:SetText(text or value)
 end
 
