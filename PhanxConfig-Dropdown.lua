@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 150111
+local MINOR_VERSION = 20150112
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -96,7 +96,7 @@ local function ListButton_OnClick(self)
 
 	dropdown.valueText:SetText(self:GetText() or self.value)
 
-	local callback = dropdown.OnValueChanged
+	local callback = dropdown.OnValueChanged or dropdown.callback
 	if callback then
 		callback(dropdown, self.value, self:GetText())
 	end
@@ -314,6 +314,7 @@ local methods = {}
 function methods:GetValue()
 	return self.selected or self.valueText:GetText()
 end
+
 function methods:SetValue(value, text)
 	self.selected = value
 	if not text and self.items and type(self.items[1]) == "table" then
@@ -327,32 +328,13 @@ function methods:SetValue(value, text)
 	self.valueText:SetText(text or value)
 end
 
-function methods:GetLabel()
-	return self.labelText:GetText()
-end
-function methods:SetLabel(text)
-	if type(text) ~= "string" then text = nil end
-	self.labelText:SetText(text)
-end
-
-function methods:GetTooltip()
-	return self.tooltipText
-end
-function methods:SetTooltip(text)
-	if type(text) ~= "string" then text = nil end
-	self.tooltipText = text
-end
-
 function methods:GetList()
 	return self.items
 end
+
 function methods:SetList(list)
 	if type(list) ~= "table" then list = nil end
 	self.items = list
-end
-
-function methods:SetKeepShownOnClick(value)
-	self.keepShownOnClick = value
 end
 
 function methods:Enable()
@@ -360,6 +342,7 @@ function methods:Enable()
 	self.valueText:SetFontObject(GameFontHighlightSmall)
 	self.button:Enable()
 end
+
 function methods:Disable()
 	self.labelText:SetFontObject(GameFontDisable)
 	self.valueText:SetFontObject(GameFontDisableSmall)
@@ -455,9 +438,9 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 		dropdown[name] = func
 	end
 
-	dropdown:SetLabel(name)
-	dropdown:SetTooltip(tooltipText)
-	dropdown:SetList(items)
+	dropdown.labelText:SetText(name)
+	dropdown.tooltipText = tooltipText
+	dropdown.items = items
 	dropdown.keepShownOnClick = keepShownOnClick
 
 	return dropdown
