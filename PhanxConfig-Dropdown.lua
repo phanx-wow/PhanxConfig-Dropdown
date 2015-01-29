@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20150112
+local MINOR_VERSION = 20150128
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -355,7 +355,7 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	assert(type(parent) == "table" and type(rawget(parent, 0)) == "userdata", "PhanxConfig-Dropdown: parent must be a frame")
 
 	local dropdown = CreateFrame("Frame", nil, parent)
-	dropdown:SetSize(186, 42)
+	dropdown:SetSize(200, 48)
 	dropdown:EnableMouse(true)
 	dropdown:SetScript("OnEnter", Frame_OnEnter)
 	dropdown:SetScript("OnLeave", Frame_OnLeave)
@@ -363,18 +363,18 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 --[[
 	dropdown.bg = dropdown:CreateTexture(nil, "BACKGROUND")
 	dropdown.bg:SetAllPoints(true)
-	dropdown.bg:SetTexture(0, 128, 0, 0.5)
+	dropdown.bg:SetTexture(0, 0.5, 0, 0.5)
 ]]
 	local left = dropdown:CreateTexture(nil, "BORDER")
-	left:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", -16, 45)
-	left:SetSize(25, 64)
+	left:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", -16, 48)
+	left:SetSize(25, 66)
 	left:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	left:SetTexCoord(0, 0.1953125, 0, 1)
 	dropdown.bgLeft = left
 
 	local right = dropdown:CreateTexture(nil, "BORDER")
-	right:SetPoint("TOPRIGHT", dropdown, "BOTTOMRIGHT", 15, 45)
-	right:SetSize(25, 64)
+	right:SetPoint("TOPRIGHT", dropdown, "BOTTOMRIGHT", 15, 48)
+	right:SetSize(25, 66)
 	right:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	right:SetTexCoord(0.8046875, 1, 0, 1)
 	dropdown.bgRight = right
@@ -400,25 +400,25 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	dropdown.valueText = value
 
 	local button = CreateFrame("Button", nil, dropdown)
-	button:SetSize(24, 24)
+	button:SetSize(26, 26)
 	button:SetPoint("TOPRIGHT", right, -16, -18)
 	button:SetPoint("TOPLEFT", left, 16, -18)
 
 	local normal = button:CreateTexture(nil, "ARTWORK")
 	normal:SetPoint("RIGHT")
-	normal:SetSize(24, 24)
+	normal:SetSize(26, 26)
 	normal:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 	button:SetNormalTexture(normal)
 
 	local pushed = button:CreateTexture(nil, "ARTWORK")
 	pushed:SetPoint("RIGHT")
-	pushed:SetSize(24, 24)
+	pushed:SetSize(26, 26)
 	pushed:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
 	button:SetPushedTexture(pushed)
 
 	local disabled = button:CreateTexture(nil, "ARTWORK")
 	disabled:SetPoint("RIGHT")
-	disabled:SetSize(24, 24)
+	disabled:SetSize(26, 26)
 	disabled:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
 	button:SetDisabledTexture(disabled)
 
