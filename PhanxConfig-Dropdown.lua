@@ -366,15 +366,15 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	dropdown.bg:SetTexture(0, 0.5, 0, 0.5)
 ]]
 	local left = dropdown:CreateTexture(nil, "BORDER")
-	left:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", -16, 48)
-	left:SetSize(25, 66)
+	left:SetPoint("TOPLEFT", dropdown, "BOTTOMLEFT", -16, 47)
+	left:SetSize(25, 64)
 	left:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	left:SetTexCoord(0, 0.1953125, 0, 1)
 	dropdown.bgLeft = left
 
 	local right = dropdown:CreateTexture(nil, "BORDER")
-	right:SetPoint("TOPRIGHT", dropdown, "BOTTOMRIGHT", 15, 48)
-	right:SetSize(25, 66)
+	right:SetPoint("TOPRIGHT", dropdown, "BOTTOMRIGHT", 15, 47)
+	right:SetSize(25, 64)
 	right:SetTexture("Interface\\Glues\\CharacterCreate\\CharacterCreate-LabelFrame")
 	right:SetTexCoord(0.8046875, 1, 0, 1)
 	dropdown.bgRight = right
@@ -399,32 +399,34 @@ function lib:New(parent, name, tooltipText, items, keepShownOnClick)
 	value:SetHeight(10)
 	dropdown.valueText = value
 
+	local BUTTONSIZE = 25
+
 	local button = CreateFrame("Button", nil, dropdown)
-	button:SetSize(26, 26)
-	button:SetPoint("TOPRIGHT", right, -16, -18)
+	button:SetSize(BUTTONSIZE, BUTTONSIZE)
 	button:SetPoint("TOPLEFT", left, 16, -18)
+	button:SetPoint("TOPRIGHT", right, -16, -18)
 
 	local normal = button:CreateTexture(nil, "ARTWORK")
 	normal:SetPoint("RIGHT")
-	normal:SetSize(26, 26)
+	normal:SetSize(BUTTONSIZE, BUTTONSIZE)
 	normal:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Up")
 	button:SetNormalTexture(normal)
 
 	local pushed = button:CreateTexture(nil, "ARTWORK")
 	pushed:SetPoint("RIGHT")
-	pushed:SetSize(26, 26)
+	pushed:SetSize(BUTTONSIZE, BUTTONSIZE)
 	pushed:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Down")
 	button:SetPushedTexture(pushed)
 
 	local disabled = button:CreateTexture(nil, "ARTWORK")
 	disabled:SetPoint("RIGHT")
-	disabled:SetSize(26, 26)
+	disabled:SetSize(BUTTONSIZE, BUTTONSIZE)
 	disabled:SetTexture("Interface\\ChatFrame\\UI-ChatIcon-ScrollDown-Disabled")
 	button:SetDisabledTexture(disabled)
 
 	local highlight = button:CreateTexture(nil, "HIGHLIGHT")
 	highlight:SetPoint("RIGHT")
-	highlight:SetSize(24, 24)
+	highlight:SetSize(BUTTONSIZE - 2, BUTTONSIZE - 2)
 	highlight:SetTexture("Interface\\Buttons\\UI-Common-MouseHilight")
 	highlight:SetBlendMode("ADD")
 	button:SetHighlightTexture(highlight)
