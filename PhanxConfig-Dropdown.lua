@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20170723
+local MINOR_VERSION = 20170828
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -19,14 +19,9 @@ lib.listFrames = lib.listFrames or {}
 
 local MAX_LIST_SIZE = 15
 
-local S_UChatScrollButton,S_igMainMenuOptionCheckBoxOn
-if SOUNDKIT then
-	S_UChatScrollButton = SOUNDKIT.U_CHAT_SCROLL_BUTTON
-	S_igMainMenuOptionCheckBoxOn = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
-else
-	S_UChatScrollButton = 'UChatScrollButton'
-	S_igMainMenuOptionCheckBoxOn = 'igMainMenuOptionCheckBoxOn'
-end
+local S_UChatScrollButton = 1115
+local S_igMainMenuOptionCheckBoxOn = 856
+local PlaySound = PlaySoundKitID or PlaySound
 
 ------------------------------------------------------------------------
 
