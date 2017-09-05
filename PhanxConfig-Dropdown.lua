@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20170828
+local MINOR_VERSION = 20170904
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -18,10 +18,6 @@ if not lib then return end
 lib.listFrames = lib.listFrames or {}
 
 local MAX_LIST_SIZE = 15
-
-local S_UChatScrollButton = 1115
-local S_igMainMenuOptionCheckBoxOn = 856
-local PlaySound = PlaySoundKitID or PlaySound
 
 ------------------------------------------------------------------------
 
@@ -105,7 +101,7 @@ local function ListButton_OnClick(self)
 		callback(dropdown, self.value, self:GetText())
 	end
 
-	PlaySound(S_UChatScrollButton)
+	PlaySound(1115) -- UChatScrollButton
 
 	if dropdown.keepShownOnClick then
 		OpenDropdown(dropdown)
@@ -298,7 +294,7 @@ end
 ------------------------------------------------------------------------
 
 local function Button_OnClick(self)
-	PlaySound(S_igMainMenuOptionCheckBoxOn)
+	PlaySound(856) -- igMainMenuOptionCheckBoxOn
 
 	local dropdown = self:GetParent()
 	OpenDropdown(dropdown)
