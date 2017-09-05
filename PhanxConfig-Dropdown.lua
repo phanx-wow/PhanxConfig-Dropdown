@@ -101,7 +101,7 @@ local function ListButton_OnClick(self)
 		callback(dropdown, self.value, self:GetText())
 	end
 
-	PlaySound(1115) -- UChatScrollButton
+	PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
 
 	if dropdown.keepShownOnClick then
 		OpenDropdown(dropdown)
@@ -294,7 +294,7 @@ end
 ------------------------------------------------------------------------
 
 local function Button_OnClick(self)
-	PlaySound(856) -- igMainMenuOptionCheckBoxOn
+	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 
 	local dropdown = self:GetParent()
 	OpenDropdown(dropdown)
