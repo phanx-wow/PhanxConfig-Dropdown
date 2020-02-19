@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20170904
+local MINOR_VERSION = 20200219
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -30,12 +30,17 @@ local function OpenDropdown(dropdown)
 		dropdown.list = list
 	end
 
+	for i = 1, #lib.listFrames do
+		lib.listFrames[i].isActive = false
+	end
+
 	local show = not list:IsShown()
 	CloseDropDownMenus()
 
 	if show then
 		list:Show()
 		list:Raise()
+		list.isActive = true
 		local selectedIndex
 		local items, selected = dropdown.items, dropdown.selected
 		for i = 1, #items do
@@ -54,7 +59,9 @@ end
 
 local function CloseDropdowns(_, _, dropDownFrame, _, _, _, _, clickedButton)
 	for i = 1, #lib.listFrames do
-		lib.listFrames[i]:Hide()
+		if not lib.listFrames[i].isActive then
+			lib.listFrames[i]:Hide()
+		end
 	end
 end
 
@@ -83,6 +90,7 @@ end
 
 local function Frame_OnHide(self)
 	if self.list then
+		self.list.isActive = false
 		self.list:Hide()
 	end
 end
@@ -92,6 +100,7 @@ end
 local function ListButton_OnClick(self)
 	local dropdown = self:GetParent():GetParent()
 	dropdown.selected = self.value
+	dropdown.list.isActive = false
 	dropdown.list:Hide()
 
 	dropdown.valueText:SetText(self:GetText() or self.value)
