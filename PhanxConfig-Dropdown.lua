@@ -10,7 +10,7 @@
 	credits line -- any modified versions must be renamed to avoid conflicts.
 ----------------------------------------------------------------------]]
 
-local MINOR_VERSION = 20200219
+local MINOR_VERSION = 20201001
 
 local lib, oldminor = LibStub:NewLibrary("PhanxConfig-Dropdown", MINOR_VERSION)
 if not lib then return end
@@ -256,7 +256,7 @@ function CreateList(dropdown) -- local
 
 	id = id + 1
 
-	local list = CreateFrame("Button", "PhanxConfigDropdown" .. id, dropdown)
+	local list = CreateFrame("Button", "PhanxConfigDropdown" .. id, dropdown, BackdropTemplateMixin and "BackdropTemplate")
 	list:SetFrameStrata("DIALOG")
 	list:SetToplevel(true)
 	list:Hide()
